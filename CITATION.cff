@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this module in your publication, please cite as below."
+type: software
+title: "Count latent factorization"
+abstract: |
+  Latent gene expression methods for count normalization
+authors:
+  - family-names: "Gunz"
+    given-names: "Samuel"
+    email: "samuel.gunz@uzh.ch"
+date-released: "2026-07-08"
+version: "1.0.0"
+license: BSD-3-Clause
+url: "https://github.com/CHANGE_ME/count-factor"
+repository-code: "https://github.com/CHANGE_ME/count-factor"
+keywords:
+  - bioinformatics
+  - computational-biology
+  - benchmark
+  - omnibenchmark
+  - module
+references:
+  - title: "Original implementation"
+    authors:
+      - family-names: "Gunz"
+        given-names: "Samuel"
+    type: software
+    url: "https://github.com/CHANGE_ME/count-factor"
