@@ -1,6 +1,6 @@
 [workspace]
 authors = ["Samuel Gunz <samuel.gunz@uzh.ch>"]
-channels = ["conda-forge", "https://conda.anaconda.org/bioconda", "bioconda"]
+channels = ["conda-forge", "bioconda", "nodefaults", "https://conda.anaconda.org/conda-forge", "https://conda.anaconda.org/bioconda"]
 name = "count-factor"
 platforms = ["linux-64"]
 version = "0.1.0"
@@ -9,6 +9,8 @@ version = "0.1.0"
 
 [dependencies]
 bioconductor-newwave = ">=1.20.0,<2"
+bioconductor-rhdf5 = "*"
+bioconductor-hdf5array = "*"
 bioconductor-rhdf5lib = ">=1.32.0,<2"
 datatable = { version = ">=1.1.0,<2", channel = "conda-forge" }
 yaml = { version = ">=0.2.5,<0.3", channel = "conda-forge" }
@@ -16,3 +18,8 @@ bioconductor-delayedarray = ">=0.36.0,<0.37"
 r-optparse = { version = ">=1.8.2,<2", channel = "conda-forge" }
 r-base = ">=4.5.3,<4.6"
 bioconductor-anndatar = { version = ">=1.0.2,<2", channel = "bioconda" }
+bioconductor-singlecellexperiment = "*"
+r-argparser = "*"
+r-stringr = "*"
+r-yaml = "*"
+"r-data.table" = "*"

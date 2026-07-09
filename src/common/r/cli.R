@@ -33,6 +33,5 @@ SCHEMA_DIR <- "src/common/schema"
 }
 
 # On purpose, we don't try to enforce options or choices — left for later.
-
 add_base_args  <- function(p) .inject(p, file.path(SCHEMA_DIR, "_base.json"))
 add_stage_args <- function(p, schema) .inject(p, file.path(SCHEMA_DIR, paste0(schema, ".json")))

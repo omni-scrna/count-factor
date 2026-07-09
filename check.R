@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 suppressPackageStartupMessages({
-  library(rhdf5)
-  library(DelayedArray)
   library(Matrix)
-  library(optparse)
-  library(yaml)
-  library(data.table)
+  library(HDF5Array)
+  library(BiocSingular)
   library(NewWave)
+  library(anndataR)
+  library(SingleCellExperiment)
+  library(data.table)
 })
 cat("OK\n")
