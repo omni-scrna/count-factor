@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this module in your publication, please cite as below."
 type: software
-title: "Count latent factorization"
+title: "Latent count factorization"
 abstract: |
   Latent gene expression methods for count normalization
 authors:
