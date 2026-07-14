@@ -23,6 +23,7 @@ p <- arg_parser("CNTFCT module")
 p <- add_base_args(p)                    # --output_dir, --name
 p <- add_stage_args(p, "CNTFCT")     # the stage I/O contract
 # your own method params — argparser directly (its add_argument requires `help`):
+p <- add_argument(p, "--factorization_type", type = "character", help = "type of factorization")
 p <- add_argument(p, "--n_dim", type = "integer", help = "number of latent dimensions")
 p <- add_argument(p, "--random_seed", type = "integer", help = "seed")
 
@@ -36,40 +37,66 @@ for (i in 1:length(args)) {
 }
 cat(sprintf("----------------------------------\n"))
 
-# select number of latent dims
-pca_dim <- args$n_dim
 
-# read cellids to subset on
-cellids <- readLines(gzfile(args$filtered_cellids))
-cat("length(cellids):", length(cellids), "\n")
+run_factorization <- function(sce, args){
+  # set seed
+  set.seed(args$random_seed)
 
-# read H5AD into SCE
-sce <- read_h5ad(args$rawdata_h5ad, as = "SingleCellExperiment")
-sce <- sce[,cellids]
+  if (args$factorization_type == "newwave"){
+    # select latent dimensions / embeddings
+    fitted <- NewWave::newFit(Y = sce, K = args$n_dim, n_gene_disp = 100, children = 4)
+    scores <- NewWave::newW(fitted)
+    loadings <- NewWave::newAlpha(fitted)
+  }
 
-# read the filtered matrix
-sce_filt <- TENxMatrix(args$normalized_selected_h5, group = "matrix")
-rownames(sce_filt)
+  if (args$factorization_type == "scgbm"){
+    out <- scGBM::gbm.sc(counts(sce), M = args$n_dim, ncores = 4)
+    scores <- out$scores
+    loadings <- out$loadings
+  }
 
-# For testing: subset cells and genes
-# sce <- sce[, 1:1000]
-# gene_idx <- sample(nrow(sce), 200)
+  else {
+    stop("Unknown factorization_type: ", args$factorization_type)
+  }
 
-# select the rownames from normalized_selected_h5
-sce <- sce[rownames(sce_filt), ]
-# filter genes with zero counts
-keep <- rowSums(counts(sce)) > 0
-sce  <- sce[keep, ]
+  list(scores = scores,
+       loadings = loadings)
+}
 
-cat("datasets loaded: running factorization\n")
+main <- function() {
+  # read cellids to subset on
+  cellids <- readLines(gzfile(args$filtered_cellids))
+  cat("length(cellids):", length(cellids), "\n")
 
-set.seed(args$random_seed)
-sce <- NewWave::newWave(Y = sce, K = pca_dim, n_gene_disp = 100, children = 4) # children = number of cores
-# select latent dimensions / embeddings
-res <- reducedDim(sce, "newWave")
+  # read H5AD into SCE
+  sce <- read_h5ad(args$rawdata_h5ad, as = "SingleCellExperiment")
+  sce <- sce[,cellids]
 
-# save embeddings
-out_embeddings_tsv <- file.path(args$output_dir, sprintf("%s_reduced_dims.tsv", args$name))
- fwrite(data.frame(cell_id = rownames(res), res), out_embeddings_tsv,
-    sep = "\t", quote = FALSE, row.names = FALSE)
-  cat(sprintf("  wrote: %s\n", out_embeddings_tsv))
+  # read the filtered matrix
+  sce_filt <- TENxMatrix(args$normalized_selected_h5, group = "matrix")
+  rownames(sce_filt)
+
+  # select the rownames from normalized_selected_h5
+  sce <- sce[rownames(sce_filt), ]
+  # filter genes with zero counts
+  keep <- rowSums(counts(sce)) > 0
+  sce  <- sce[keep, ]
+
+  cat("datasets loaded: running factorization\n")
+  res <- run_factorization(sce, args)
+
+  # save embeddings: scores
+  out_scores_tsv <- file.path(args$output_dir, sprintf("%s_factor_scores.tsv", args$name))
+  fwrite(data.frame(cell_id =  colnames(sce), res$scores), out_scores_tsv,
+      sep = "\t", quote = FALSE, row.names = FALSE)
+    cat(sprintf("  wrote: %s\n", out_scores_tsv))
+  
+  out_loadings_tsv <- file.path(args$output_dir, sprintf("%s_factor_loadings.tsv", args$name))
+  fwrite(data.frame(gene = rownames(res$loadings), res$loadings), out_loadings_tsv,
+      sep = "\t", quote = FALSE, row.names = FALSE)
+    cat(sprintf("  wrote: %s\n", out_loadings_tsv))
+}
+
+if (sys.nframe() == 0L) {
+  main()
+}
