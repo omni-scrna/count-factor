@@ -58,7 +58,7 @@ run_factorization <- function(sce, args){
     Y <- as.matrix(counts(sce))
     out <- scGBM::gbm.sc(Y, M = args$n_dim, ncores = 4, max.iter = 1E5)
     scores <- out$scores
-    loadings <- out$loadings
+    loadings <- t(out$loadings)
   }
 
   else {
@@ -93,7 +93,7 @@ main <- function() {
 
   # save embeddings: scores
   out_scores_tsv <- file.path(args$output_dir, sprintf("%s_factor_scores.tsv", args$name))
-  fwrite(data.frame(cell_id =  colnames(sce), res$scores), out_scores_tsv,
+  fwrite(data.frame(cell_id = colnames(sce), res$scores), out_scores_tsv,
       sep = "\t", quote = FALSE, row.names = FALSE)
     cat(sprintf("  wrote: %s\n", out_scores_tsv))
   
