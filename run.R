@@ -42,14 +42,20 @@ run_factorization <- function(sce, args){
   # set seed
   set.seed(args$random_seed)
 
+  cat("class:", paste(class(counts(sce)), collapse = ", "), "\n")
+
   if (args$factorization_type == "newwave"){
+    # counts in memory
+    counts(sce) <- as(counts(sce), "CsparseMatrix")
     # select latent dimensions / embeddings
-    fitted <- NewWave::newFit(Y = sce, K = args$n_dim, n_gene_disp = 100, children = 4)
+    fitted <- NewWave::newFit(Y = sce, K = args$n_dim, children = 4)
     scores <- NewWave::newW(fitted)
     loadings <- NewWave::newAlpha(fitted)
   }
 
-  if (args$factorization_type == "scgbm"){
+  else if (args$factorization_type == "scgbm"){
+        # counts in memory
+    counts(sce) <- as(counts(sce), "CsparseMatrix")
     out <- scGBM::gbm.sc(counts(sce), M = args$n_dim, ncores = 4)
     scores <- out$scores
     loadings <- out$loadings
