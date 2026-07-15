@@ -54,9 +54,9 @@ run_factorization <- function(sce, args){
   }
 
   else if (args$factorization_type == "scgbm"){
-        # counts in memory
-    counts(sce) <- as(counts(sce), "CsparseMatrix")
-    out <- scGBM::gbm.sc(counts(sce), M = args$n_dim, ncores = 4)
+    # counts in memory
+    Y <- as.matrix(counts(sce))
+    out <- scGBM::gbm.sc(Y, M = args$n_dim, ncores = 4)
     scores <- out$scores
     loadings <- out$loadings
   }
