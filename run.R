@@ -91,18 +91,13 @@ main <- function() {
   cat("datasets loaded: running factorization\n")
   res <- run_factorization(sce, args)
 
-  out_loadings_tsv <- file.path(args$output_dir, sprintf("%s_factor_loadings.tsv", args$name))
-  fwrite(data.frame(gene = gene_ids, res$loadings, check.names = FALSE), out_loadings_tsv,
-      sep = "\t", quote = FALSE, row.names = FALSE)
-  cat(sprintf("  wrote: %s\n", out_loadings_tsv))
-
   # save embeddings: scores
   out_scores_tsv <- file.path(args$output_dir, sprintf("%s_factor_scores.tsv", args$name))
   fwrite(data.frame(cell_id =  colnames(sce), res$scores), out_scores_tsv,
       sep = "\t", quote = FALSE, row.names = FALSE)
     cat(sprintf("  wrote: %s\n", out_scores_tsv))
   
-  # loadings: gene names
+  # save embeddings: loadings with gene names
   gene_names <- rownames(sce)
   stopifnot(length(gene_names) == nrow(res$loadings))
   
