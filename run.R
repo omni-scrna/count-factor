@@ -99,6 +99,9 @@ main <- function() {
   
   # save embeddings: loadings with gene names
   gene_names <- rownames(sce)
+  cat(sprintf("[loadings check] gene_names=%d loadings_rows=%d match=%s\n",
+    length(gene_names), nrow(res$loadings),
+    identical(length(gene_names), nrow(res$loadings))))
   stopifnot(length(gene_names) == nrow(res$loadings))
   
   out_loadings_tsv <- file.path(args$output_dir, sprintf("%s_factor_loadings.tsv", args$name))
