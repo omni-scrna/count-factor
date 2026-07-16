@@ -11,10 +11,11 @@ suppressPackageStartupMessages({
   library(Matrix)
   library(HDF5Array)
   library(BiocSingular)
-  library(NewWave)
-  library(anndataR)
   library(SingleCellExperiment)
   library(data.table)
+  library(anndataR)
+  library(NewWave)
+  library(glmpca)
 })
 
 # arg parsing
@@ -57,6 +58,14 @@ run_factorization <- function(sce, args){
     # counts in memory
     Y <- as.matrix(counts(sce))
     out <- scGBM::gbm.sc(Y, M = args$n_dim, ncores = 4, max.iter = 1E5)
+    scores <- out$scores
+    loadings <- out$loadings
+  }
+
+  else if (args$factorization_type == "glmpca"){
+    # counts in memory
+    Y <- as.matrix(counts(sce))
+    out <- glmpca::glmpca(Y, L = args$n_dim, fam = "nb")
     scores <- out$scores
     loadings <- out$loadings
   }
