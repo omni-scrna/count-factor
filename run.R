@@ -50,7 +50,7 @@ run_factorization <- function(sce, args){
     # select latent dimensions / embeddings
     fitted <- NewWave::newFit(Y = sce, K = args$n_dim, children = 4)
     scores <- NewWave::newW(fitted)
-    loadings <- NewWave::newAlpha(fitted)
+    loadings <- t(NewWave::newAlpha(fitted))
   }
 
   else if (args$factorization_type == "scgbm"){
