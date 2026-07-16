@@ -58,7 +58,7 @@ run_factorization <- function(sce, args){
     Y <- as.matrix(counts(sce))
     out <- scGBM::gbm.sc(Y, M = args$n_dim, ncores = 4, max.iter = 1E5)
     scores <- out$scores
-    loadings <- t(out$loadings)
+    loadings <- out$loadings
   }
 
   else {
