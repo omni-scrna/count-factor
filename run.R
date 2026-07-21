@@ -68,7 +68,7 @@ run_factorization <- function(sce, args){
     out <- glmpca::glmpca(Y, L = args$n_dim, fam = "nb")
     scores <- out$factors
     loadings <- out$loadings
-    cat("glmpca out:", head(out), "\n")
+    cat("glmpca components:", paste(names(out), collapse = ", "), "\n")
     cat("dim(scores):", dim(scores), "\n")
     cat("dim(loadings):", dim(loadings), "\n")
   }
