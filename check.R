@@ -7,5 +7,6 @@ suppressPackageStartupMessages({
   library(anndataR)
   library(SingleCellExperiment)
   library(data.table)
+  library(glmpca)
 })
 cat("OK\n")

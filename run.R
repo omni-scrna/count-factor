@@ -104,7 +104,7 @@ main <- function() {
   res <- run_factorization(sce, args)
 
   # save embeddings: scores
-  out_scores_tsv <- file.path(args$output_dir, sprintf("%s_factor_scores.tsv", args$name))
+  out_scores_tsv <- file.path(args$output_dir, sprintf("%s_pcas.tsv", args$name))
   fwrite(data.frame(cell_id = colnames(sce), res$scores), out_scores_tsv,
       sep = "\t", quote = FALSE, row.names = FALSE)
     cat(sprintf("  wrote: %s\n", out_scores_tsv))
@@ -116,7 +116,7 @@ main <- function() {
     identical(length(gene_names), nrow(res$loadings))))
   stopifnot(length(gene_names) == nrow(res$loadings))
   
-  out_loadings_tsv <- file.path(args$output_dir, sprintf("%s_factor_loadings.tsv", args$name))
+  out_loadings_tsv <- file.path(args$output_dir, sprintf("%s_loadings.tsv", args$name))
   fwrite(data.frame(gene = gene_names, res$loadings), out_loadings_tsv,
       sep = "\t", quote = FALSE, row.names = FALSE)
     cat(sprintf("  wrote: %s\n", out_loadings_tsv))
