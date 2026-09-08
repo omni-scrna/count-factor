@@ -104,7 +104,7 @@ main <- function() {
   res <- run_factorization(sce, args)
 
   # save embeddings: scores
-  out_scores_tsv <- file.path(args$output_dir, sprintf("%s_pcas.tsv", args$name))
+  out_scores_tsv <- file.path(args$output_dir, sprintf("%s_embedding.tsv", args$name))
   fwrite(data.frame(cell_id = colnames(sce), res$scores), out_scores_tsv,
       sep = "\t", quote = FALSE, row.names = FALSE)
     cat(sprintf("  wrote: %s\n", out_scores_tsv))
