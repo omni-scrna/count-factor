@@ -1,9 +1,9 @@
 cff-version: 1.2.0
 message: "If you use this module in your publication, please cite as below."
 type: software
-title: "Latent count factorization"
+title: "Count factorization methods"
 abstract: |
-  Latent gene expression methods for count normalization
+  Methods for count factorization and normalization
 authors:
   - family-names: "Gunz"
     given-names: "Samuel"
@@ -11,8 +11,8 @@ authors:
 date-released: "2026-07-08"
 version: "1.0.0"
 license: BSD-3-Clause
-url: "https://github.com/CHANGE_ME/count-factor"
-repository-code: "https://github.com/CHANGE_ME/count-factor"
+url: "https://github.com/omni-scrna/count-factor"
+repository-code: "https://github.com/omni-scrna/count-factor"
 keywords:
   - bioinformatics
   - computational-biology
@@ -25,4 +25,4 @@ references:
       - family-names: "Gunz"
         given-names: "Samuel"
     type: software
-    url: "https://github.com/CHANGE_ME/count-factor"
+    url: "https://github.com/omni-scrna/count-factor"
